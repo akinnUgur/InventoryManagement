@@ -9,10 +9,10 @@ namespace InventoryManagement.Core.Interfaces
 {
     public interface IProductRepository
     {
-        void Add(Product product); 
-        void Update(Product product); 
-        void Delete(Product product); 
-        Product? GetById(int id); 
+        Task AddAsync(Product product); 
+        Task Update(Product product); 
+        Task Delete(Product product); 
+        Task<Product> GetByIdAsync(int id); 
         IEnumerable<Product> GetAll(); 
         IEnumerable<Product> GetByCategoryId(int categoryId); 
     }

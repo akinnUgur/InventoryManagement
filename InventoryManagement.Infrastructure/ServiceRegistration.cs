@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Core.Entities;
 using InventoryManagement.Core.Interfaces;
 using InventoryManagement.Core.Interfaces.Base;
+using InventoryManagement.Core.Settings;
 using InventoryManagement.Infrastructure.Contexts;
 using InventoryManagement.Infrastructure.Repositories;
 using InventoryManagement.Infrastructure.Services;
@@ -28,16 +29,21 @@ namespace InventoryManagement.Infrastructure
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
-            services.AddTransient<IInventoryRepository, InventoryRepository>();
+
 
             #endregion
 
 
 
+            services.Configure<MailSettings>(options =>
+            {
+                configuration.GetSection("MailSettings");
+            });
+
 
             #region Services
             services.AddTransient<IEmailService, EmailService>();
-            services.AddScoped<Core.Interfaces.Base.IObserver<Order>, EmailObserver>();
+            services.AddSingleton<Core.Interfaces.Base.IObserver<Order>, EmailObserver>();
 
             #endregion
         }

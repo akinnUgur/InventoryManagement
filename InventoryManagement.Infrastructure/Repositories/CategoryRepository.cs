@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Core.Entities;
 using InventoryManagement.Core.Interfaces;
 using InventoryManagement.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,27 +18,35 @@ namespace InventoryManagement.Infrastructure.Repositories
             _context = context;
         }
 
-        public void Add(Category category)
+        public async Task AddAsync(Category category)
         {
-            _context.Categories.Add(category);
+            if (category.ParentId.HasValue)
+            {
+                var parentCategory = await _context.Categories.FindAsync(category.ParentId.Value);
+                if (parentCategory != null)
+                {
+                    category.ParentCategory = parentCategory;  // Set the ParentCategory if exists
+                }
+            }
 
+            await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();  
         }
 
-        public void Update(Category category)
+        public async Task Update(Category category)
         {
             _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
 
         }
-        public void Delete(Category category)
+        public async Task Delete(Category category)
         {
             _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
 
         }
 
-        public Category? GetById(int id)
-        {
-            return _context.Categories.FirstOrDefault(c => c.Id == id); 
-        }
+      
 
         public IEnumerable<Category> GetAll()
         {
@@ -52,6 +61,12 @@ namespace InventoryManagement.Infrastructure.Repositories
         public IEnumerable<Category> GetSubCategories(int parentId)
         {
             return _context.Categories.Where(c => c.ParentId == parentId).ToList(); 
+        }
+
+        public async Task<Category> GetByIdAsync(int id)
+        {
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        
         }
     }
 }

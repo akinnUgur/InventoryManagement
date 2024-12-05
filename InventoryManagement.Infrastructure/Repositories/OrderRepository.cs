@@ -20,44 +20,51 @@ namespace InventoryManagement.Infrastructure.Repositories
             _context = context;
         }
 
-        public void Add(Order order)
+        public async Task AddAsync(Order order)
         {
-            _context.Orders.Add(order);
+           
+            await _context.Orders.AddAsync(order);
+            await _context.SaveChangesAsync();
+            await order.NotifyObservers();
 
         }
 
-        public void Update(Order order)
+        public async Task Update(Order order)
         {
             _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+            await order.NotifyObservers();
 
         }
 
-        public void Delete(Order order)
+        public async Task Delete(Order order)
         {
             _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
 
         }
 
-        public Order? GetById(int id)
+        public async Task<Order> GetByIdAsync(int id)
         {
-            return _context.Orders
-                           .Include(o => o.OrderItems) 
-                           .FirstOrDefault(o => o.Id == id); 
+
+            return await _context.Orders
+                           .Include(o => o.OrderItems)
+                           .FirstOrDefaultAsync(o => o.Id == id);
         }
 
         public IEnumerable<Order> GetAll()
         {
             return _context.Orders
-                           .Include(o => o.OrderItems) 
-                           .ToList(); 
+                           .Include(o => o.OrderItems)
+                           .ToList();
         }
 
         public IEnumerable<Order> GetByDateRange(DateTime startDate, DateTime endDate)
         {
             return _context.Orders
                            .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate)
-                           .Include(o => o.OrderItems) 
-                           .ToList(); 
+                           .Include(o => o.OrderItems)
+                           .ToList();
         }
 
         public async Task ChangeStatusAsync(int orderId, OrderStatus newStatus)
@@ -65,11 +72,14 @@ namespace InventoryManagement.Infrastructure.Repositories
             var order = await _context.Orders
                                  .FirstOrDefaultAsync(o => o.Id == orderId);
 
-            if (order != null && order.Status != newStatus) 
+            if (order != null && order.Status != newStatus)
             {
-                await order.ChangeStatus(newStatus); 
-                await _context.SaveChangesAsync(); 
+                await order.ChangeStatus(newStatus);
+                await _context.SaveChangesAsync();
             }
+
         }
+
+   
     }
 }

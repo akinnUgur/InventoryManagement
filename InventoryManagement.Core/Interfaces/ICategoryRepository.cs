@@ -10,13 +10,13 @@ namespace InventoryManagement.Core.Interfaces
 {
     public interface ICategoryRepository
     {
-        void Add(Category category);
+        Task AddAsync(Category category);
 
-        void Update(Category category);
+        Task Update(Category category);
 
-        void Delete(Category category);
+        Task Delete(Category category);
 
-        Category? GetById(int id);
+        Task<Category> GetByIdAsync(int id);
         IEnumerable<Category> GetAll();
 
         IEnumerable<Category> GetRootCategories();

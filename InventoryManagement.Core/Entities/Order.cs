@@ -13,7 +13,6 @@ namespace InventoryManagement.Core.Entities
     {
         public int Id { get; set; }
         public OrderStatus Status{ get; set; }
-        public string UniqueCode { get; set; }
         public DateTime OrderDate { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 

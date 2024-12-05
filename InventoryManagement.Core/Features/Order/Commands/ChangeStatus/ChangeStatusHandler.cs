@@ -33,7 +33,7 @@ namespace InventoryManagement.Core.Features.Order.Commands.ChangeStatus
             await _orderRepository.Update(order);
 
 
-            return ApiResponse<ChangeStatusResponse>.Success(new(), $"Order No: {order.Id}'s Status has been changed to {order.Status} successfully", 2001);
+            return ApiResponse<ChangeStatusResponse>.Success(new(), $"Order No: {order.Id}'s Status has been changed to {order.Status} successfully", 201);
         }
     }
 }

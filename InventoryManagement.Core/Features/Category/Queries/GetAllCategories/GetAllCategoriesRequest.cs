@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Core.Features.Category.Queries.GetAllCategories
 {
-    public class GetAllCategoriesRequest : IRequest<ApiResponse<GetAllCategoriesResponse>>
+    public class GetAllCategoriesRequest : IRequest<ApiResponse<List<GetAllCategoriesResponse>>>
     {
     }
 }

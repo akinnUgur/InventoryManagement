@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Core.Features.Category.Queries.GetAllCategories
 {
-    public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesRequest, ApiResponse<GetAllCategoriesResponse>>
+    public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesRequest, ApiResponse<List<GetAllCategoriesResponse>>>
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -20,18 +20,19 @@ namespace InventoryManagement.Core.Features.Category.Queries.GetAllCategories
             _categoryRepository = categoryRepository;
         }
 
-        public Task<ApiResponse<GetAllCategoriesResponse>> Handle(GetAllCategoriesRequest request, CancellationToken cancellationToken)
+        public Task<ApiResponse<List<GetAllCategoriesResponse>>> Handle(GetAllCategoriesRequest request, CancellationToken cancellationToken)
         {
             var categories = _categoryRepository.GetAll();
 
-            GetAllCategoriesResponse response = new GetAllCategoriesResponse();
-
-            foreach (var category in categories)
+            var response = categories.Select(category => new GetAllCategoriesResponse
             {
-                response.Categories.Add(category);
-            }
+                Id = category.Id,
+                Name = category.Name,
+                ParentId = category.ParentId
+            }).ToList();
+            
 
-            return Task.FromResult(ApiResponse<GetAllCategoriesResponse>.Success(response, "Categories retrieved successfully", 201));
+            return Task.FromResult(ApiResponse<List<GetAllCategoriesResponse>>.Success(response, "Categories retrieved successfully", 201));
         }
     }
 }

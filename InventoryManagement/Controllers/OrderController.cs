@@ -12,7 +12,7 @@ namespace InventoryManagement.WebAPI.Controllers
     [ApiController]
     public class OrderController : BaseApiController
     {
-        [HttpPost("CreateOrdet")]
+        [HttpPost("CreateOrder")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
         {
             var data = await Mediator.Send(request);

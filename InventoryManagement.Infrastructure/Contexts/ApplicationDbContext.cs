@@ -61,10 +61,6 @@ namespace InventoryManagement.Infrastructure.Contexts
             {
                 entity.HasKey(o => o.Id);
 
-                entity.Property(o => o.UniqueCode)
-                      .IsRequired()
-                      .HasMaxLength(50); // UniqueCode'un uzunluğu sınırlı
-
                 entity.Property(o => o.Email)
                       .IsRequired()
                       .HasMaxLength(100); // Email uzunluğu sınırlı

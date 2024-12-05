@@ -8,11 +8,10 @@ namespace InventoryManagement.Core.Features.Category.Queries.GetAllCategories
 {
     public class GetAllCategoriesResponse
     {
-        public ICollection<Entities.Category> Categories { get; set; } 
-        public GetAllCategoriesResponse()
-        {
-            Categories = new List<Entities.Category>();
-        }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int? ParentId { get; set; }
+  
     }
 
    

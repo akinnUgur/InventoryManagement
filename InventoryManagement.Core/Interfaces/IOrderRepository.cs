@@ -16,7 +16,7 @@ namespace InventoryManagement.Core.Interfaces
         Task<Order> GetByIdAsync(int id); 
         IEnumerable<Order> GetAll();
         IEnumerable<Order> GetByDateRange(DateTime startDate, DateTime endDate);
-        Task ChangeStatusAsync(int orderId, OrderStatus newStatus);
+
 
 
     }

@@ -19,32 +19,7 @@ namespace InventoryManagement.Core.Entities
         public string Email {  get; set; }
 
 
-        private readonly List<Interfaces.Base.IObserver<Order>> _observers = new List<Interfaces.Base.IObserver<Order>>();
-
-        public void AddObserver(Interfaces.Base.IObserver<Order> observer)
-        {
-            _observers.Add(observer);
-        }
-
-        public void RemoveObserver(Interfaces.Base.IObserver<Order> observer)
-        {
-            _observers.Remove(observer);
-        }
-
-        public async Task NotifyObservers()
-        {
-            foreach (var observer in _observers)
-            {
-                await observer.NotifyAsync(this);  // Observer'a bildirimi yap
-            }
-        }
-
-        public async Task ChangeStatus(OrderStatus newStatus)
-        {
-            Status = newStatus;
-            await NotifyObservers(); 
-        }
-
+    
 
     }
 

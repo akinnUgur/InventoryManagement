@@ -12,28 +12,20 @@ namespace InventoryManagement.Core.Features.Order.Commands.ChangeStatus
     public class ChangeStatusHandler : IRequestHandler<ChangeStatusRequest, ApiResponse<ChangeStatusResponse>>
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IOrderService _orderService;
 
-        public ChangeStatusHandler(IOrderRepository orderRepository)
+        public ChangeStatusHandler(IOrderRepository orderRepository, IOrderService orderService)
         {
             _orderRepository = orderRepository;
+            _orderService = orderService;
         }
 
         public async Task<ApiResponse<ChangeStatusResponse>> Handle(ChangeStatusRequest request, CancellationToken cancellationToken)
         {
-            var order = await _orderRepository.GetByIdAsync(request.OrderId);
-
-            switch (request.OrderStatus)
-            {
-                case 1: order.Status = Enums.OrderStatus.Pending; break;
-                case 2: order.Status = Enums.OrderStatus.Shipped; break;
-                case 3: order.Status = Enums.OrderStatus.Arrived; break;
-                    default: break;    
-            }
-
-            await _orderRepository.Update(order);
+            await _orderService.UpdateOrderStatusAsync(request.OrderId, (Enums.OrderStatus)request.OrderStatus);
 
 
-            return ApiResponse<ChangeStatusResponse>.Success(new(), $"Order No: {order.Id}'s Status has been changed to {order.Status} successfully", 201);
+            return ApiResponse<ChangeStatusResponse>.Success(new(), $"Order No: {request.OrderId}'s Status has been changed to {(Enums.OrderStatus)request.OrderStatus} successfully", 201);
         }
     }
 }

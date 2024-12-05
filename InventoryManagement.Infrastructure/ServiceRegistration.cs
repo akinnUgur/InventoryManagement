@@ -1,6 +1,5 @@
 ﻿using InventoryManagement.Core.Entities;
 using InventoryManagement.Core.Interfaces;
-using InventoryManagement.Core.Interfaces.Base;
 using InventoryManagement.Core.Settings;
 using InventoryManagement.Infrastructure.Contexts;
 using InventoryManagement.Infrastructure.Repositories;
@@ -8,11 +7,7 @@ using InventoryManagement.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace InventoryManagement.Infrastructure
 {
@@ -34,16 +29,16 @@ namespace InventoryManagement.Infrastructure
             #endregion
 
 
+            services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
 
-            services.Configure<MailSettings>(options =>
-            {
-                configuration.GetSection("MailSettings");
-            });
+
+
 
 
             #region Services
             services.AddTransient<IEmailService, EmailService>();
             services.AddSingleton<Core.Interfaces.Base.IObserver<Order>, EmailObserver>();
+            services.AddTransient<IOrderService, OrderService>();
 
             #endregion
         }

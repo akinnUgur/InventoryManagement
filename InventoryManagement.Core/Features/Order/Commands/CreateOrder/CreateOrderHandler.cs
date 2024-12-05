@@ -15,11 +15,11 @@ namespace InventoryManagement.Core.Features.Order.Commands.CreateOrder
     public class CreateOrderHandler : IRequestHandler<CreateOrderRequest, ApiResponse<CreateOrderResponse>>
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly Interfaces.Base.IObserver<Entities.Order> _emailObserver;
-        public CreateOrderHandler(IOrderRepository orderRepository, Interfaces.Base.IObserver<Entities.Order> emailObserver)
+
+        public CreateOrderHandler(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
-            _emailObserver = emailObserver;
+
         }
 
         async Task<ApiResponse<CreateOrderResponse>> IRequestHandler<CreateOrderRequest, ApiResponse<CreateOrderResponse>>.Handle(CreateOrderRequest request, CancellationToken cancellationToken)
@@ -37,8 +37,6 @@ namespace InventoryManagement.Core.Features.Order.Commands.CreateOrder
                 }).ToList()
             };
 
-
-            order.AddObserver(_emailObserver);
 
 
             await _orderRepository.AddAsync(order);

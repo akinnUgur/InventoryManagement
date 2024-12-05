@@ -25,7 +25,6 @@ namespace InventoryManagement.Infrastructure.Repositories
            
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
-            await order.NotifyObservers();
 
         }
 
@@ -33,7 +32,6 @@ namespace InventoryManagement.Infrastructure.Repositories
         {
             _context.Orders.Update(order);
             await _context.SaveChangesAsync();
-            await order.NotifyObservers();
 
         }
 
@@ -67,18 +65,7 @@ namespace InventoryManagement.Infrastructure.Repositories
                            .ToList();
         }
 
-        public async Task ChangeStatusAsync(int orderId, OrderStatus newStatus)
-        {
-            var order = await _context.Orders
-                                 .FirstOrDefaultAsync(o => o.Id == orderId);
-
-            if (order != null && order.Status != newStatus)
-            {
-                await order.ChangeStatus(newStatus);
-                await _context.SaveChangesAsync();
-            }
-
-        }
+    
 
    
     }

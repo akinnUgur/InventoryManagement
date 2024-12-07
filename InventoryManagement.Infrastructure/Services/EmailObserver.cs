@@ -24,26 +24,57 @@ namespace InventoryManagement.Infrastructure.Services
         public async Task NotifyAsync(Order order)
         {
             // Durum değişikliklerine göre e-posta gönderme
-            if (order.Status == OrderStatus.Shipped)
+            if (order.Status == OrderStatus.Pending)
             {
                 var mailRequest = new MailRequest
                 {
                     To = order.Email,
-                    Subject = "Your Order has Shipped",
-                    Body = $"Your order with ID {order.Id} has been shipped and is on its way!"
+                    Subject = "Your Order is currently in pending",
+                    Body = $"Your order with ID {order.Id} has been received and is currently pending! If there will be any changes we will inform you via Email"
                 };
                 await _emailService.SendEmail(mailRequest);
             }
-            else if (order.Status == OrderStatus.Arrived)
+            else if (order.Status == OrderStatus.InProgress)
             {
                 var mailRequest = new MailRequest
                 {
                     To = order.Email,
-                    Subject = "Your Order has Arrived",
-                    Body = $"Your order with ID {order.Id} has arrived at its destination."
+                    Subject = "Your Order is currently in progress",
+                    Body = $"Your order with ID {order.Id} is currently being processed. We plan to deliver your order to you as soon as possible."
                 };
                 await _emailService.SendEmail(mailRequest);
             }
+            else if(order.Status == OrderStatus.Cancelled)
+            {
+                var mailRequest = new MailRequest
+                {
+                    To = order.Email,
+                    Subject = "Your Order has been cancelled",
+                    Body = $"Your order with ID {order.Id} has been cancelled due to problems on our side. We apologize for the inconvenience."
+                };
+                await _emailService.SendEmail(mailRequest);
+            }
+            else if (order.Status == OrderStatus.Refunded)
+            {
+                var mailRequest = new MailRequest
+                {
+                    To = order.Email,
+                    Subject = "Your Order is refunded",
+                    Body = $"The amount of your order has been refunded to you. We apologize for the inconvenience that occurred again. (order id: {order.Id})"
+                };
+                await _emailService.SendEmail(mailRequest);
+            }
+            else if (order.Status == OrderStatus.Completed)
+            {
+                var mailRequest = new MailRequest
+                {
+                    To = order.Email,
+                    Subject = "Your Order is completed",
+                    Body = $"Your order with ID {order.Id} has been completed and sent to you. We would like to thank you for choosing us."
+                };
+                await _emailService.SendEmail(mailRequest);
+            }
+
         }
     }
 

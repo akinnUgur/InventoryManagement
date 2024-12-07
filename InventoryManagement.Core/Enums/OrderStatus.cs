@@ -9,7 +9,9 @@ namespace InventoryManagement.Core.Enums
     public enum OrderStatus
     {
         Pending = 1,
-        Shipped = 2,
-        Arrived = 3,
+        InProgress = 0,
+        Completed = -1,
+        Cancelled = -2,
+        Refunded = -3
     }
 }

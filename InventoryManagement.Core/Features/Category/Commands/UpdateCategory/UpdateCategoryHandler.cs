@@ -21,7 +21,10 @@ namespace InventoryManagement.Core.Features.Category.Commands.UpdateCategory
         public async Task<ApiResponse<UpdateCategoryResponse>> Handle(UpdateCategoryRequest request, CancellationToken cancellationToken)
         {
             var category = await _categoryRepository.GetByIdAsync(request.Id);
-
+            if(category == null)
+            {
+                return ApiResponse<UpdateCategoryResponse>.Error("Category not found", 404);
+            }
             category.Name = request.Name;
 
             await _categoryRepository.Update(category);
